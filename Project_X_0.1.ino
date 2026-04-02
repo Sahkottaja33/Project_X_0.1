@@ -1,0 +1,87 @@
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLEServer.h>
+#include "motor.h"
+
+#define CMD_ON     0x01
+#define CMD_OFF    0x02
+#define CMD_LEFT   0x03
+#define CMD_RIGHT  0x04
+#define CMD_FIRE   0x05
+
+BLEServer* server;
+BLECharacteristic* commandChar;
+
+class ServerCallbacks : public BLEServerCallbacks {
+  void onConnect(BLEServer* pServer) {
+    Serial.println("iPhone connected!");
+  }
+  void onDisconnect(BLEServer* pServer) {
+    Serial.println("iPhone disconnected!");
+    BLEDevice::startAdvertising();
+  }
+};
+
+class CommandCallback : public BLECharacteristicCallbacks {
+  void onWrite(BLECharacteristic *characteristic) {
+    std::string value = characteristic->getValue();
+    if (value.length() == 0) return;
+
+    uint8_t cmd = value[0];
+
+    switch (cmd) {
+      case CMD_ON:    Serial.println("CMD: ON");    break;
+      case CMD_OFF:   Serial.println("CMD: OFF");   break;
+      
+      case CMD_LEFT:  {
+        motorStepLeft();
+        Serial.println("CMD: LEFT");  
+        break; }
+      
+      case CMD_RIGHT:{ 
+        motorStepRight();
+        Serial.println("CMD: RIGHT"); 
+        break; }
+      
+      case CMD_FIRE:  Serial.println("CMD: FIRE");  break;
+      default:
+        Serial.print("CMD: Unknown (");
+        Serial.print(cmd);
+        Serial.println(")");
+        break;
+    }
+  }
+};
+
+void setup() {
+  delay(300);
+  Serial.begin(115200);
+  Serial.println("BLE starting...");
+  motorInit();
+
+  BLEDevice::init("ESP32-S3 Controller");
+  delay(200);
+
+  server = BLEDevice::createServer();
+  server->setCallbacks(new ServerCallbacks());
+
+  BLEService *service = server->createService("1234");
+
+  commandChar = service->createCharacteristic(
+    "ABCD",
+    BLECharacteristic::PROPERTY_WRITE
+  );
+  commandChar->setCallbacks(new CommandCallback());
+
+  service->start();
+
+  BLEAdvertising *adv = BLEDevice::getAdvertising();
+  adv->setScanResponse(true);
+
+  BLEDevice::startAdvertising();
+
+  Serial.println("BLE ready. Waiting for iPhone...");
+}
+
+void loop() {
+}
