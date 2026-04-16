@@ -1,13 +1,14 @@
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
-#include "motor.h"
+#include "motor.h" 
 
 #define CMD_ON     0x01
 #define CMD_OFF    0x02
 #define CMD_LEFT   0x03
 #define CMD_RIGHT  0x04
 #define CMD_FIRE   0x05
+#define CMD_LOAD   0x06
 
 BLEServer* server;
 BLECharacteristic* commandChar;
@@ -30,28 +31,45 @@ class CommandCallback : public BLECharacteristicCallbacks {
     uint8_t cmd = value[0];
 
     switch (cmd) {
-      case CMD_ON:    Serial.println("CMD: ON");    break;
-      case CMD_OFF:   Serial.println("CMD: OFF");   break;
-      
-      case CMD_LEFT:  {
+
+      case CMD_ON:
+        Serial.println("CMD: ON");
+        break;
+
+      case CMD_OFF:
+        Serial.println("CMD: OFF");
+        break;
+
+      case CMD_LEFT:
         motorStepLeft();
-        Serial.println("CMD: LEFT");  
-        break; }
-      
-      case CMD_RIGHT:{ 
+        Serial.println("CMD: LEFT");
+        break;
+
+      case CMD_RIGHT:
         motorStepRight();
-        Serial.println("CMD: RIGHT"); 
-        break; }
-      
-      case CMD_FIRE:  Serial.println("CMD: FIRE");  break;
+        Serial.println("CMD: RIGHT");
+        break;
+
+      case CMD_FIRE:
+        Serial.println("CMD: FIRE");
+        break;
+
+      case CMD_LOAD:
+        Serial.println("CMD: LOAD");
+        motorStepLeft2();
+        break;
+
       default:
         Serial.print("CMD: Unknown (");
         Serial.print(cmd);
         Serial.println(")");
         break;
-    }
-  }
-};
+    } // <-- tämä sulkee switchin oikein
+
+  } // <-- tämä sulkee onWrite-funktion
+
+}; // <-- tämä sulkee classin
+
 
 void setup() {
   delay(300);
@@ -65,10 +83,10 @@ void setup() {
   server = BLEDevice::createServer();
   server->setCallbacks(new ServerCallbacks());
 
-  BLEService *service = server->createService("1234");
+  BLEService *service = server->createService("00001234-0000-1000-8000-00805f9b34fb");
 
   commandChar = service->createCharacteristic(
-    "ABCD",
+    "0000abcd-0000-1000-8000-00805f9b34fb",
     BLECharacteristic::PROPERTY_WRITE
   );
   commandChar->setCallbacks(new CommandCallback());

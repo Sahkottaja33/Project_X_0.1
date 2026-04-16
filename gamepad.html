@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLE Gamepad</title>
+
+<style>
+body {
+  background: #111;
+  color: white;
+  font-family: Arial;
+  text-align: center;
+}
+
+button {
+  width: 90px;
+  height: 90px;
+  margin: 10px;
+  border-radius: 50%;
+  font-size: 20px;
+  border: none;
+  color: white;
+}
+
+#connectBtn {
+  width: 200px;
+  height: 60px;
+  border-radius: 10px;
+  background: #4CAF50;
+  font-size: 22px;
+}
+
+.ps-square   { background: #3b82f6; }
+.ps-circle   { background: #ef4444; }
+.ps-triangle { background: #22c55e; }
+.ps-cross    { background: #a855f7; }
+
+.arrow {
+  width: 80px;
+  height: 80px;
+  border-radius: 15px;
+  background: #333;
+  font-size: 30px;
+}
+
+#dpad {
+  margin-top: 20px;
+}
+
+#buttons {
+  margin-top: 20px;
+}
+
+#startBtn {
+  width: 150px;
+  height: 60px;
+  border-radius: 10px;
+  background: #888;
+  font-size: 22px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>ESP32-S3 BLE Gamepad</h2>
+
+
+<button id="connectBtn">Connect</button>
+
+<div id="dpad">
+  <button class="arrow" id="leftBtn">←</button>
+  <button class="arrow" id="rightBtn">→</button>
+</div>
+
+<div id="buttons">
+  <button class="ps-square" id="squareBtn">■</button>
+  <button class="ps-triangle" id="triangleBtn">▲</button>
+  <button class="ps-circle" id="circleBtn">●</button>
+  <button class="ps-cross" id="crossBtn">✖</button>
+</div>
+
+<button id="startBtn">START</button>
+
+<script>
+let device, server, service, characteristic;
+
+// Täydet UUID:t (Chrome vaatii nämä)
+const SERVICE_UUID = "00001234-0000-1000-8000-00805f9b34fb";
+const CHARACTERISTIC_UUID = "0000abcd-0000-1000-8000-00805f9b34fb";
+
+async function connect() {
+  try {
+    device = await navigator.bluetooth.requestDevice({
+      acceptAllDevices: true,
+      optionalServices: [SERVICE_UUID]
+    });
+
+    server = await device.gatt.connect();
+    service = await server.getPrimaryService(SERVICE_UUID);
+    characteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+
+    alert("Connected!");
+  } catch (error) {
+    console.error("BLE error:", error);
+    alert("Connection failed: " + error);
+  }
+}
+
+async function sendCommand(cmd) {
+  if (!characteristic) return;
+  let data = new Uint8Array([cmd]);
+  await characteristic.writeValue(data);
+}
+
+document.getElementById("connectBtn").onclick = connect;
+
+// PS buttons
+document.getElementById("squareBtn").onclick   = () => sendCommand(0x06);
+document.getElementById("circleBtn").onclick   = () => sendCommand(0x05);
+document.getElementById("triangleBtn").onclick = () => sendCommand(0x02);
+document.getElementById("crossBtn").onclick    = () => sendCommand(0x01);
+
+// D-pad
+document.getElementById("leftBtn").onclick  = () => sendCommand(0x03);
+document.getElementById("rightBtn").onclick = () => sendCommand(0x04);
+
+// Start
+document.getElementById("startBtn").onclick = () => sendCommand(0x01);
+</script>
+
+</body>
+</html>
