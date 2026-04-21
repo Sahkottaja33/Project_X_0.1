@@ -2,6 +2,7 @@
 #include <BLEUtils.h>
 #include <BLEServer.h>
 #include "motor.h" 
+#include "solenoid.h"
 
 #define CMD_ON     0x01
 #define CMD_OFF    0x02
@@ -51,7 +52,10 @@ class CommandCallback : public BLECharacteristicCallbacks {
         break;
 
       case CMD_FIRE:
-        Serial.println("CMD: FIRE");
+        Serial.println("CMD: Fire");
+        setSolenoid(true);   // päälle
+        delay(200);
+        setSolenoid(false);  // pois
         break;
 
       case CMD_LOAD:
@@ -76,6 +80,7 @@ void setup() {
   Serial.begin(115200);
   Serial.println("BLE starting...");
   motorInit();
+  solenoidInit();
 
   BLEDevice::init("ESP32-S3 Controller");
   delay(200);
