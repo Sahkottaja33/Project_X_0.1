@@ -1,16 +1,13 @@
 #include "sensor.h"
 
-static int _pin
-
-void sensor_init(int pin){
-	_pin = pin;              // sisäinen muuttuja
-	_pinMode(_pin, INPUT);
+void sensor_init(){
+	pinMode(SENSOR_PIN, INPUT);
 }
 
 bool sensor_ballDetected(){
-	return analogRead(_pin) < SENSOR_TRESHOLD; // palauttaa true, jos paluuarvo alittaa kynnyksen
+	return analogRead(SENSOR_PIN) < SENSOR_TRESHOLD; // palauttaa true, jos paluuarvo alittaa kynnyksen
 }
 
 int sensor_getRawValue(){
-	return analogRead(_pin); // mahdollinen debuggaus serial monitorilla
+	return analogRead(SENSOR_PIN); // mahdollinen debuggaus serial monitorilla, kynnyksen tarkastus
 }
