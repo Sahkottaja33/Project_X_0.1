@@ -1,8 +1,8 @@
-#indef FAN_H
+#ifndef FAN_H
 #define FAN_H
 #include <Arduino.h>
 
-#define FAN_PIN ... // kytkentä?
+#define FAN_PIN 18 // kytkentä?
 
 void fanInit();
 void setFan(bool state);
