@@ -67,7 +67,7 @@ class CommandCallback : public BLECharacteristicCallbacks {
 
       case CMD_LOAD:
         Serial.println("CMD: LOAD");
-        feedBall();
+        loadSpring();
         break;
 
       default:
