@@ -44,12 +44,12 @@ class CommandCallback : public BLECharacteristicCallbacks {
         break;
 
       case CMD_LEFT:
-        motorStepLeft();
+        feederForward();
         Serial.println("CMD: LEFT");
         break;
 
       case CMD_RIGHT:
-        motorStepRight();
+        feederBackward();
         Serial.println("CMD: RIGHT");
         break;
 
@@ -63,7 +63,7 @@ class CommandCallback : public BLECharacteristicCallbacks {
 
       case CMD_LOAD:
         Serial.println("CMD: LOAD");
-        motorStepLeft2();
+        loadSpring();
         break;
 
       default:
