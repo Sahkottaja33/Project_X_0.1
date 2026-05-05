@@ -111,4 +111,17 @@ void setup() {
 }
 
 void loop() {
+  if (sensor_ballDetected()){
+    delay(50);          // säätövara lyöntihetkeen
+
+    setSolenoid(true);  // vapautetaan jousi
+    delay(150);
+    setSolenoid(false); // estetään solenoidin kuumeneminen
+
+    delay(500);
+    // <-- mailan viritysfunktio tähän
+
+    delay(3000);         // riippuu kuinka kauan mailan virityksessä kestää
+  }
+  delay(50);
 }
