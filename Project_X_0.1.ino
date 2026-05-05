@@ -45,11 +45,15 @@ class CommandCallback : public BLECharacteristicCallbacks {
 
       case CMD_LEFT:
         feederForward();
+        delay(500);
+        feederStop();
         Serial.println("CMD: LEFT");
         break;
 
       case CMD_RIGHT:
         feederBackward();
+        delay(500);
+        feederStop();
         Serial.println("CMD: RIGHT");
         break;
 
@@ -63,7 +67,7 @@ class CommandCallback : public BLECharacteristicCallbacks {
 
       case CMD_LOAD:
         Serial.println("CMD: LOAD");
-        loadSpring();
+        feedBall();
         break;
 
       default:
