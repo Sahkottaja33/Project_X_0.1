@@ -28,4 +28,29 @@ void batStop();
 void loadSpring();
 void returnMotor();
 
+// Menee Project_X tiedostoon :)
+//void loop() {
+  //if (sensor_ballDetected()){
+    //delay(50);          // säätövara lyöntihetkeen
+
+    //setSolenoid(true);  // vapautetaan jousi
+    //delay(150);
+    //setSolenoid(false); // estetään solenoidin kuumeneminen
+
+    //delay(500);
+    //setSolenoid(true);  // aukaistaan solenoidi mailan virittämistä varten
+    //delay(200);
+
+    //loadSpring();       // viritetään jousi/maila
+
+    //setSolenoid(false); // lukitaan maila paikalleen
+    //delay(200);
+
+    //returnMotor();      // vapautetaan moottori, jotta maila pääsee liikkumaan vapaasti
+
+    //feedBall();         // ladataan uusi pallo
+  //}
+  //delay(50);
+}
+
 #endif
