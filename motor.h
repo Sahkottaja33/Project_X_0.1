@@ -8,21 +8,24 @@
 #define BIN1 15
 #define BIN2 16
 #define STBY 10
+#define FEED_TIME 500
+#define FEEDER_SPEED 200
+#define LOAD_TIME 2500
+#define RETURN_TIME 2500
+#define MOTOR_SPEED 255
 
 
 void motorInit();
 
-//Motor 1 (Left, right)
-void motorStop();
-void motorLeft();
-void motorRight();
-void motorStepLeft();
-void motorStepRight();
+// FEEDER
+void feederStop();
+void feederForward();  // entinen left
+void feederBackward(); // entinen right
+void feedBall();
 
-//Motor 2 (bat)
-void motorStop2();
-void motorLeft2();
-void motorRight2();
-void motorStepLeft2();
-void motorStepRight2();
+// BAT
+void batStop();
+void loadSpring();
+void returnMotor();
+
 #endif
