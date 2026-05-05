@@ -6,6 +6,6 @@
 
 void fanInit();
 void setFan(bool state);
-void PulseFan(int duration); // funktio pallon laukaisuun
+void pulseFan(int duration); // funktio pallon laukaisuun
 
 #endif

@@ -3,6 +3,8 @@
 #include <BLEServer.h>
 #include "motor.h" 
 #include "solenoid.h"
+#include "fan.h"
+#include "sensor.h"
 
 #define CMD_ON     0x01
 #define CMD_OFF    0x02
@@ -53,6 +55,7 @@ class CommandCallback : public BLECharacteristicCallbacks {
 
       case CMD_FIRE:
         Serial.println("CMD: Fire");
+        pulseFan(10000);
         setSolenoid(true);   // päälle
         delay(200);
         setSolenoid(false);  // pois
@@ -79,6 +82,7 @@ void setup() {
   delay(300);
   Serial.begin(115200);
   Serial.println("BLE starting...");
+  fanInit();
   motorInit();
   solenoidInit();
 
