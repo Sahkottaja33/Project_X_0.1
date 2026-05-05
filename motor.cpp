@@ -2,12 +2,12 @@
 #include "motor.h"
 
 void motorInit() {
-  //motor 1
+  // FEEDER
   pinMode(PWMA, OUTPUT);
   pinMode(AIN1, OUTPUT);
   pinMode(AIN2, OUTPUT);
 
-  //motor2
+  // BAT
   pinMode(PWMB, OUTPUT);
   pinMode(BIN1, OUTPUT);
   pinMode(BIN2, OUTPUT);
@@ -16,68 +16,56 @@ void motorInit() {
   pinMode(STBY, OUTPUT);
   digitalWrite(STBY, HIGH);
   
-  motorStop();
-  motorStop2();
+  feederStop();
+  batStop();
 }
-//Motor 1
 
-void motorStop() {
+//FEEDER
+
+void feederStop() {
   digitalWrite(AIN1, LOW);
   digitalWrite(AIN2, LOW);
   analogWrite(PWMA, 0);
 }
 
-void motorLeft() {
+void feederForward() {
   digitalWrite(AIN1, LOW);
   digitalWrite(AIN2, HIGH);
-  analogWrite(PWMA, 200);
+  analogWrite(PWMA, FEEDER_SPEED);
 }
 
-void motorRight() {
+void feederBackward() {
   digitalWrite(AIN1, HIGH);
   digitalWrite(AIN2, LOW);
-  analogWrite(PWMA, 200);
+  analogWrite(PWMA, FEEDER_SPEED);
 }
 
-void motorStepLeft() {
-  motorLeft();
-  delay(200);
-  motorStop();
+void feedBall() {
+  feederForward();
+  delay(FEED_TIME);       // säätövara
+  feederStop();
 }
 
-void motorStepRight() {
-  motorRight();
-  delay(200);
-  motorStop();
-
-//Motor 2
-}
-void motorStop2() {
+void batStop() {
   digitalWrite(BIN1, LOW);
   digitalWrite(BIN2, LOW);
   analogWrite(PWMB, 0);
 }
 
-void motorLeft2() {
+void loadSpring() {
   digitalWrite(BIN1, LOW);
   digitalWrite(BIN2, HIGH);
-  analogWrite(PWMB, 200);
+  analogWrite(PWMB, MOTOR_SPEED);
+
+  delay(LOAD_TIME); // kuinka kauan jousen viritykseen kuluu
+  batStop();
 }
 
-void motorRight2() {
+void returnMotor() {
   digitalWrite(BIN1, HIGH);
   digitalWrite(BIN2, LOW);
-  analogWrite(PWMB, 200);
-}
+  analogWrite(PWMB, MOTOR_SPEED);
 
-void motorStepLeft2() {
-  motorLeft2();
-  delay(500);
-  motorStop2();
-}
-
-void motorStepRight2() {
-  motorRight2();
-  delay(500);
-  motorStop2();
+  delay(RETURN_TIME); // palautuminen
+  batStop();
 }
