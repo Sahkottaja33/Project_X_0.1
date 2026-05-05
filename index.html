@@ -54,11 +54,7 @@ button {
   font-size: 30px;
 }
 
-#dpad {
-  margin-top: 20px;
-}
-
-#buttons {
+#dpad, #buttons {
   margin-top: 20px;
 }
 
@@ -69,6 +65,11 @@ button {
   background: #888;
   font-size: 22px;
 }
+
+#analogLR {
+  width: 80%;
+  margin-top: 30px;
+}
 </style>
 </head>
 
@@ -77,6 +78,10 @@ button {
 <h2>ESP32-S3 BLE Gamepad</h2>
 
 <button id="connectBtn">Connect</button>
+
+<!-- ANALOG SLIDER -->
+<h3>Analog Left / Right</h3>
+<input type="range" id="analogLR" min="-100" max="100" value="0">
 
 <div id="dpad">
   <button class="arrow" id="leftBtn">←</button>
@@ -95,7 +100,7 @@ button {
 <script>
 let device, server, service, characteristic;
 
-// Täydet UUID:t (Chrome ja iOS PWA vaativat nämä)
+// Täydet UUID:t
 const SERVICE_UUID = "00001234-0000-1000-8000-00805f9b34fb";
 const CHARACTERISTIC_UUID = "0000abcd-0000-1000-8000-00805f9b34fb";
 
@@ -119,24 +124,61 @@ async function connect() {
 
 async function sendCommand(cmd) {
   if (!characteristic) return;
-  let data = new Uint8Array([cmd]);
+  let data = new Uint8Array(cmd);
   await characteristic.writeValue(data);
 }
 
 document.getElementById("connectBtn").onclick = connect;
 
 // PS buttons
-document.getElementById("squareBtn").onclick   = () => sendCommand(0x06);
-document.getElementById("circleBtn").onclick   = () => sendCommand(0x05);
-document.getElementById("triangleBtn").onclick = () => sendCommand(0x02);
-document.getElementById("crossBtn").onclick    = () => sendCommand(0x01);
+document.getElementById("squareBtn").onclick   = () => sendCommand([0x06]);
+document.getElementById("circleBtn").onclick   = () => sendCommand([0x05]);
+document.getElementById("triangleBtn").onclick = () => sendCommand([0x02]);
+document.getElementById("crossBtn").onclick    = () => sendCommand([0x01]);
 
 // D-pad
-document.getElementById("leftBtn").onclick  = () => sendCommand(0x03);
-document.getElementById("rightBtn").onclick = () => sendCommand(0x04);
+document.getElementById("leftBtn").onclick  = () => sendCommand([0x03]);
+document.getElementById("rightBtn").onclick = () => sendCommand([0x04]);
 
 // Start
-document.getElementById("startBtn").onclick = () => sendCommand(0x01);
+document.getElementById("startBtn").onclick = () => sendCommand([0x01]);
+
+// ANALOG SLIDER
+document.getElementById("analogLR").oninput = (e) => {
+  let value = parseInt(e.target.value); // -100 ... 100
+  sendCommand([0x10, value & 0xFF]);    // 0x10 = analog-komento
+};
+
+// KEYBOARD CONTROLS
+document.addEventListener("keydown", (event) => {
+  switch (event.key) {
+    case "ArrowLeft":
+      sendCommand([0x03]);
+      break;
+    case "ArrowRight":
+      sendCommand([0x04]);
+      break;
+    case "x":
+    case "X":
+      sendCommand([0x01]);
+      break;
+    case "c":
+    case "C":
+      sendCommand([0x05]);
+      break;
+    case "v":
+    case "V":
+      sendCommand([0x06]);
+      break;
+    case "b":
+    case "B":
+      sendCommand([0x02]);
+      break;
+    case "Enter":
+      sendCommand([0x01]);
+      break;
+  }
+});
 </script>
 
 </body>
