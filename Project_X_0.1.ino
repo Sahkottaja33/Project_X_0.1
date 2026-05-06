@@ -37,10 +37,12 @@ class CommandCallback : public BLECharacteristicCallbacks {
 
       case CMD_ON:
         Serial.println("CMD: ON");
+        returnMotor();
         break;
 
       case CMD_OFF:
         Serial.println("CMD: OFF");
+        feedBall();
         break;
 
       case CMD_LEFT:
