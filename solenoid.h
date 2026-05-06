@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define SOL_PIN 17
+#define SOL_PIN 18 // 17
 
 void solenoidInit();
 void setSolenoid(bool state);
