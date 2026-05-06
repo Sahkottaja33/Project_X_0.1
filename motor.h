@@ -1,13 +1,13 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#define PWMA 5
-#define PWMB 4
-#define AIN1 6
-#define AIN2 7
+#define PWMA 4 // 5
+#define PWMB 5 // 4
+#define AIN1 7 // 6
+#define AIN2 6 // 7
 #define BIN1 15
 #define BIN2 16
-#define STBY 10
+#define STBY 17 // 10
 #define FEED_TIME 500
 #define FEEDER_SPEED 200
 #define LOAD_TIME 2500
