@@ -2,7 +2,7 @@
 #define FAN_H
 #include <Arduino.h>
 
-#define FAN_PIN 18 // kytkentä?
+#define FAN_PIN 21 // 18
 
 void fanInit();
 void setFan(bool state);
