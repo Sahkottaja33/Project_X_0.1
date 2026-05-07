@@ -1,3 +1,8 @@
+/** PÄÄOHJELMA
+  * Tämä tiedosto hoitaa Bluetooth-yhteyden, komentojen vastaanoton
+  * ja laitteen toimintalogiikan.
+  */
+
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
@@ -6,16 +11,18 @@
 #include "fan.h"
 #include "sensor.h"
 
-#define CMD_ON     0x01
-#define CMD_OFF    0x02
-#define CMD_LEFT   0x03
-#define CMD_RIGHT  0x04
-#define CMD_FIRE   0x05
-#define CMD_LOAD   0x06
+// Bluetooth-komennot
+#define CMD_ON     0x01 // Moottorin palautus
+#define CMD_OFF    0x02 // Pallon lataus
+#define CMD_LEFT   0x03 // Latausmoottori eteenpäin
+#define CMD_RIGHT  0x04 // Latausmoottori taaksepäin
+#define CMD_FIRE   0x05 // Tuuletin + solenoidi
+#define CMD_LOAD   0x06 // Jousen(mailan) viritys
 
 BLEServer* server;
 BLECharacteristic* commandChar;
 
+// BLE-palvelimen tilan seuranta (yhteys laitteeseen)
 class ServerCallbacks : public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
     Serial.println("Device connected!");
@@ -26,12 +33,13 @@ class ServerCallbacks : public BLEServerCallbacks {
   }
 };
 
+// Bluetooth-komentojen käsittely
 class CommandCallback : public BLECharacteristicCallbacks {
   void onWrite(BLECharacteristic *characteristic) {
     std::string value = characteristic->getValue();
     if (value.length() == 0) return;
 
-    uint8_t cmd = value[0];
+    uint8_t cmd = value[0]; // Ensimmäinen tavu komennoksi
 
     switch (cmd) {
 
@@ -88,6 +96,8 @@ void setup() {
   delay(300);
   Serial.begin(115200);
   Serial.println("BLE starting...");
+
+  // Alijärjestelmien alustus
   fanInit();
   motorInit();
   solenoidInit();
@@ -119,16 +129,49 @@ void setup() {
 
 void loop() {
   if (sensor_ballDetected()){
+    Serial.println("SENSORI: Pallo havaittu!");
     delay(50);          // säätövara lyöntihetkeen
-
-    setSolenoid(true);  // vapautetaan jousi
+   
+    Serial.println("2. LAUKAISU: Solenoidi vapauttaa jousen...");
+    setSolenoid(true);  
     delay(150);
-    setSolenoid(false); // estetään solenoidin kuumeneminen
+    setSolenoid(false); 
+    Serial.println("   > Solenoidi palautettu lepotilaan.");
 
+    delay(1000); // Tauko
+
+    // 2. VALMISTELU VIRITYSTÄ VARTEN
+    Serial.println("3. VIRITYS: Avataan lukitus viritystä varten...");
+    setSolenoid(true);  
+    delay(200);
+
+    // 3. MAILAN VIRITYS
+    Serial.println("4. MOOTTORI: Viritetään jousi");
+    loadSpring();
+    Serial.println("   > Viritys suoritettu.");
+
+    // 4. LUKITUS
+    Serial.println("5. LUKITUS: Suljetaan solenoidi lukitusasentoon.");
+    setSolenoid(false); 
     delay(500);
-    // <-- mailan viritysfunktio tähän
 
-    delay(3000);         // riippuu kuinka kauan mailan virityksessä kestää
+    // 5. MOOTTORIN VAPAUTUS
+    Serial.println("6. MOOTTORI: Palautetaan viritysmoottori");
+    returnMotor(); // Vapautetaan mekaaninen vastus
+    Serial.println("   > Moottori palautettu.");
+
+    // 6. PALLON SYÖTTÖ
+    delay(1000);
+    Serial.println("7. SYÖTTÖ: Ladataan uusi pallo");
+    feedBall();
+    
+    Serial.println("--- TESTISEKVENSSI VALMIS ---\n");
+    Serial.println("Odotetaan uutta havaintoa");
+    
+    // Pitkä suoja-aika sekvenssin jälkeen, ettei laite "hätkyile"
+    delay(5000); 
   }
-  delay(50);
+  
+  // Pieni viive, jotta CPU ei käy täysillä
+  delay(100); 
 }

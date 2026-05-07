@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 #define SENSOR_TRESHOLD 500 // esim, voi olla muutakin
-#define SENSOR_PIN 1     // kytkentä?
+#define SENSOR_PIN 1
 
 void sensorInit();
 bool sensor_ballDetected();
