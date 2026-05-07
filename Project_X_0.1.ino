@@ -36,7 +36,7 @@ class ServerCallbacks : public BLEServerCallbacks {
 // Bluetooth-komentojen käsittely
 class CommandCallback : public BLECharacteristicCallbacks {
   void onWrite(BLECharacteristic *characteristic) {
-    std::string value = characteristic->getValue();
+    String value = characteristic->getValue(); // ← String iso S
     if (value.length() == 0) return;
 
     uint8_t cmd = value[0]; // Ensimmäinen tavu komennoksi
