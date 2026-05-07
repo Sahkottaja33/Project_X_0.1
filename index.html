@@ -66,22 +66,16 @@ button {
   font-size: 22px;
 }
 
-#analogLR {
-  width: 80%;
-  margin-top: 30px;
-}
+
 </style>
 </head>
 
 <body>
 
-<h2>ESP32-S3 BLE Gamepad</h2>
+<h2>Pingpong Machine Gamepad</h2>
 
 <button id="connectBtn">Connect</button>
 
-<!-- ANALOG SLIDER -->
-<h3>Analog Left / Right</h3>
-<input type="range" id="analogLR" min="-100" max="100" value="0">
 
 <div id="dpad">
   <button class="arrow" id="leftBtn">←</button>
@@ -143,11 +137,6 @@ document.getElementById("rightBtn").onclick = () => sendCommand([0x04]);
 // Start
 document.getElementById("startBtn").onclick = () => sendCommand([0x01]);
 
-// ANALOG SLIDER
-document.getElementById("analogLR").oninput = (e) => {
-  let value = parseInt(e.target.value); // -100 ... 100
-  sendCommand([0x10, value & 0xFF]);    // 0x10 = analog-komento
-};
 
 // KEYBOARD CONTROLS
 document.addEventListener("keydown", (event) => {

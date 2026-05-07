@@ -1,6 +1,6 @@
 {
-  "name": "ESP32 BLE Gamepad",
-  "short_name": "BLE Gamepad",
+  "name": "ESP32 BLE Pingpong Gamepad",
+  "short_name": "Pingpong Gamepad",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#111111",
