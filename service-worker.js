@@ -1,11 +1,24 @@
+// service-worker.js
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open("v1").then((cache) => {
+    caches.open("v3").then((cache) => {
       return cache.addAll([
-        "/Project_X_0.1/",
-        "/Project_X_0.1/index.html",
-        "/Project_X_0.1/manifest.json"
+        "/",
+        "/index.html",
+        "/manifest.json",
+        "/service-worker.js"
       ]);
+    })
+  );
+});
+
+//poistaa vanhan cachen automaattisesti
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.filter((key) => key !== "v2").map((key) => caches.delete(key))
+      );
     })
   );
 });

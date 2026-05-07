@@ -25,10 +25,10 @@ BLECharacteristic* commandChar;
 // BLE-palvelimen tilan seuranta (yhteys laitteeseen)
 class ServerCallbacks : public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
-    Serial.println("iPhone connected!");
+    Serial.println("Device connected!");
   }
   void onDisconnect(BLEServer* pServer) {
-    Serial.println("iPhone disconnected!");
+    Serial.println("Device disconnected!");
     BLEDevice::startAdvertising();
   }
 };
@@ -103,8 +103,7 @@ void setup() {
   solenoidInit();
   sensorInit();
 
-  // Bluetooth-asetukset
-  BLEDevice::init("ESP32-S3 Controller");
+  BLEDevice::init("ESP32 Controller");
   delay(200);
 
   server = BLEDevice::createServer();
@@ -125,7 +124,7 @@ void setup() {
 
   BLEDevice::startAdvertising();
 
-  Serial.println("BLE ready. Waiting for iPhone...");
+  Serial.println("BLE ready. Waiting for device...");
 }
 
 void loop() {
