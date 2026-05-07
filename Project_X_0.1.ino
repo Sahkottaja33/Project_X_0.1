@@ -22,7 +22,7 @@
 BLEServer* server;
 BLECharacteristic* commandChar;
 
-// BLE-palvelimen tilan seuranta (yhteys ____)
+// BLE-palvelimen tilan seuranta (yhteys laitteeseen)
 class ServerCallbacks : public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
     Serial.println("iPhone connected!");
