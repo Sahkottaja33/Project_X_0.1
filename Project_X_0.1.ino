@@ -101,6 +101,7 @@ void setup() {
   fanInit();
   motorInit();
   solenoidInit();
+  sensorInit();
 
   // Bluetooth-asetukset
   BLEDevice::init("ESP32-S3 Controller");
