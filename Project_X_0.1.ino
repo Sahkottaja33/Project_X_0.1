@@ -129,6 +129,7 @@ void setup() {
 
 void loop() {
   if (sensor_ballDetected()){
+    Serial.println("SENSORI: Pallo havaittu!");
     delay(50);          // säätövara lyöntihetkeen
 
     setSolenoid(true);  // vapautetaan jousi
