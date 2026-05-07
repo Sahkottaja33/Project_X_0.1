@@ -1,3 +1,8 @@
+/** PÄÄOHJELMA
+  * Tämä tiedosto hoitaa Bluetooth-yhteyden, komentojen vastaanoton
+  * ja laitteen toimintalogiikan.
+  */
+
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
@@ -6,16 +11,18 @@
 #include "fan.h"
 #include "sensor.h"
 
-#define CMD_ON     0x01
-#define CMD_OFF    0x02
-#define CMD_LEFT   0x03
-#define CMD_RIGHT  0x04
-#define CMD_FIRE   0x05
-#define CMD_LOAD   0x06
+// Bluetooth-komennot
+#define CMD_ON     0x01 // Moottorin palautus
+#define CMD_OFF    0x02 // Pallon lataus
+#define CMD_LEFT   0x03 // Latausmoottori eteenpäin
+#define CMD_RIGHT  0x04 // Latausmoottori taaksepäin
+#define CMD_FIRE   0x05 // Tuuletin + solenoidi
+#define CMD_LOAD   0x06 // Jousen(mailan) viritys
 
 BLEServer* server;
 BLECharacteristic* commandChar;
 
+// BLE-palvelimen tilan seuranta (yhteys ____)
 class ServerCallbacks : public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
     Serial.println("iPhone connected!");
@@ -26,12 +33,13 @@ class ServerCallbacks : public BLEServerCallbacks {
   }
 };
 
+// Bluetooth-komentojen käsittely
 class CommandCallback : public BLECharacteristicCallbacks {
   void onWrite(BLECharacteristic *characteristic) {
     std::string value = characteristic->getValue();
     if (value.length() == 0) return;
 
-    uint8_t cmd = value[0];
+    uint8_t cmd = value[0]; // Ensimmäinen tavu komennoksi
 
     switch (cmd) {
 
@@ -88,10 +96,13 @@ void setup() {
   delay(300);
   Serial.begin(115200);
   Serial.println("BLE starting...");
+
+  // Alijärjestelmien alustus
   fanInit();
   motorInit();
   solenoidInit();
 
+  // Bluetooth-asetukset
   BLEDevice::init("ESP32-S3 Controller");
   delay(200);
 
