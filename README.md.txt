@@ -6,8 +6,11 @@ moottoria voidaan ohjata suoraan puhelimesta tai tietokoneesta.
 
 ## 🔧 Laitteisto
 - ESP32-S3 DevKit
-- TB6612FNG moottoriohjain
-- DC-moottori
+- TB6612FNG -moottoriohjain
+- DC-moottori x2
+- San Ace 40 -tuuletin
+- Solenoidi
+- TCRT5000L ir -sensori
 - USB-C kaapeli ohjelmointiin
 
 ## 📁 Projektin rakenne
@@ -15,8 +18,17 @@ moottoria voidaan ohjata suoraan puhelimesta tai tietokoneesta.
 Project_X_0.1/
 │
 ├── Project_X_0.1.ino      # Arduino-pääohjelma
-├── motor.cpp              # Moottorin ohjauslogiikka
-├── motor.h                # Moottorin määrittelyt
+├── fan.cpp                # Tuulettimen ohjauslogiikka
+├── fan.h                  # Tuulettimen määrittelyt
+├── index.html             # Ohjaimen UI
+├── manifets.json
+├── motor.cpp              # Moottoreiden ohjauslogiikka
+├── motor.h                # Moottoreiden määrittelyt
+├── sensor.cpp             # Sensorin ohjauslogiikka
+├── sensor.h               # Sensorin määrittely
+├── service-worker.js
+├── solenoid.cpp           # Solenoidin ohjauslogiikka
+├── solenoid.h             # Solenoidin määrittely
 └── gamepad.html           # Web Bluetooth -käyttöliittymä
 
 Koodi
