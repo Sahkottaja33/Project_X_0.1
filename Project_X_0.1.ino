@@ -91,6 +91,7 @@ void setup() {
   fanInit();
   motorInit();
   solenoidInit();
+  sensorInit();
 
   BLEDevice::init("ESP32-S3 Controller");
   delay(200);
