@@ -131,15 +131,47 @@ void loop() {
   if (sensor_ballDetected()){
     Serial.println("SENSORI: Pallo havaittu!");
     delay(50);          // säätövara lyöntihetkeen
-
-    setSolenoid(true);  // vapautetaan jousi
+   
+    Serial.println("2. LAUKAISU: Solenoidi vapauttaa jousen...");
+    setSolenoid(true);  
     delay(150);
-    setSolenoid(false); // estetään solenoidin kuumeneminen
+    setSolenoid(false); 
+    Serial.println("   > Solenoidi palautettu lepotilaan.");
 
+    delay(1000); // Tauko
+
+    // 2. VALMISTELU VIRITYSTÄ VARTEN
+    Serial.println("3. VIRITYS: Avataan lukitus viritystä varten...");
+    setSolenoid(true);  
+    delay(200);
+
+    // 3. MAILAN VIRITYS
+    Serial.println("4. MOOTTORI: Viritetään jousi");
+    loadSpring();
+    Serial.println("   > Viritys suoritettu.");
+
+    // 4. LUKITUS
+    Serial.println("5. LUKITUS: Suljetaan solenoidi lukitusasentoon.");
+    setSolenoid(false); 
     delay(500);
-    // <-- mailan viritysfunktio tähän
 
-    delay(3000);         // riippuu kuinka kauan mailan virityksessä kestää
+    // 5. MOOTTORIN VAPAUTUS
+    Serial.println("6. MOOTTORI: Palautetaan viritysmoottori");
+    returnMotor(); // Vapautetaan mekaaninen vastus
+    Serial.println("   > Moottori palautettu.");
+
+    // 6. PALLON SYÖTTÖ
+    delay(1000);
+    Serial.println("7. SYÖTTÖ: Ladataan uusi pallo");
+    feedBall();
+    
+    Serial.println("--- TESTISEKVENSSI VALMIS ---\n");
+    Serial.println("Odotetaan uutta havaintoa");
+    
+    // Pitkä suoja-aika sekvenssin jälkeen, ettei laite "hätkyile"
+    delay(5000); 
   }
-  delay(50);
+  
+  // Pieni viive, jotta CPU ei käy täysillä
+  delay(100); 
 }
