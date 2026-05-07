@@ -6,7 +6,7 @@
 #define SENSOR_TRESHOLD 500 // esim, voi olla muutakin
 #define SENSOR_PIN 1     // kytkentä?
 
-void sensor_init();
+void sensorInit();
 bool sensor_ballDetected();
 
 #endif
