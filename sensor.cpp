@@ -1,6 +1,6 @@
 #include "sensor.h"
 
-void sensor_init(){
+void sensorInit(){
 	pinMode(SENSOR_PIN, INPUT);
 }
 
