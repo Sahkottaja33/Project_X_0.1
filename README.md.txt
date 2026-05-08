@@ -16,7 +16,7 @@ A custom **Web Bluetooth gamepad UI** provides wireless control directly from a 
 - Resistors of varying sizes
 - 9v batteries
 - Breadboard and wires
-- 
+- San Ace 40 -fan
 
 ---
 ## Project structure
