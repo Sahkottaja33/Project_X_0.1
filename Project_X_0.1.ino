@@ -127,8 +127,8 @@ void setup() {
 void loop() {
   if (sensor_ballDetected()){
     int value = sensor_getRawValue();
-    serial.print("Raaka-arvo: ");
-    serial.println(value);
+    Serial.print("Raaka-arvo: ");
+    Serial.println(value);
     Serial.println("SENSORI: Pallo havaittu!");
     delay(50);          // säätövara lyöntihetkeen
    
