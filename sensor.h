@@ -8,5 +8,6 @@
 
 void sensorInit();
 bool sensor_ballDetected();
+int sensor_getRawValue();
 
 #endif
